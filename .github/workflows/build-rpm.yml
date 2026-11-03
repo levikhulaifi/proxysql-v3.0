@@ -19,9 +19,7 @@ jobs:
 
       - name: Build AlmaLinux 9 RPM
         run: |
-          VERSION=$(git describe --tags --long --abbrev=7)
-          echo "Building ProxySQL version: $VERSION"
-          make GIT_VERSION_BASE="$VERSION" almalinux9
+          make GIT_VERSION_BASE=v3.0.12 almalinux9
 
       - name: Upload RPM
         uses: actions/upload-artifact@v4
