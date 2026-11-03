@@ -1,0 +1,28 @@
+name: Build ProxySQL v3.0 RPM
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout ProxySQL v3.0
+        uses: actions/checkout@v4
+        with:
+          ref: v3.0
+          fetch-depth: 0
+
+      - name: Build AlmaLinux 9 RPM
+        run: make almalinux9
+
+      - name: Upload RPM
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxysql-v3.0-almalinux9-rpm
+          path: binaries/*.rpm
+          if-no-files-found: error
