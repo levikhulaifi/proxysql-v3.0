@@ -1,3 +1,4 @@
+
 name: Build ProxySQL v3.0 RPM
 
 on:
@@ -16,6 +17,18 @@ jobs:
         with:
           ref: v3.0
           fetch-depth: 0
+
+      - name: Prepare version
+        run: |
+          git fetch --force --tags
+          VERSION=$(git describe --tags --long --abbrev=7 2>/dev/null || true)
+
+          if ! echo "$VERSION" | grep -qE '^v?[0-9]+\.[0-9]+\.[0-9]+'; then
+            VERSION="v3.0.12-0-g$(git rev-parse --short=7 HEAD)"
+          fi
+
+          echo "GIT_VERSION_BASE=$VERSION" >> "$GITHUB_ENV"
+          echo "Build version: $VERSION"
 
       - name: Build AlmaLinux 9 RPM
         run: make almalinux9
